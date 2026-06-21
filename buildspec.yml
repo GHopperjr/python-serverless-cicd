@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+      nodejs: 20
+    commands:
+      - echo "Installing Serverless Framework v4..."
+      - npm install -g serverless
+  build:
+    commands:
+      - echo "Logging into Serverless Framework Dashboard..."
+      # This handles authenticating your build container with your Serverless org
+      - npx serverless deploy --stage dev --region ap-southeast-1
+
+artifacts:
+  files:
+    - '**/*'
