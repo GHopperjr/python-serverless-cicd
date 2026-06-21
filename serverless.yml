@@ -1,0 +1,86 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ecvphinternship
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: weektwoarchitectures
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: python-serverless-paul
+
+provider:
+  name: aws
+  runtime: python3.12
+  role: arn:aws:iam::956304645529:role/serverless-app-role
+
+functions:
+  getAllProducts:
+    handler: handler.get_all_products
+    events:
+      - httpApi:
+          path: /products
+          method: get
+  createOneProduct:
+    handler: handler.create_one_product
+    events:
+      - httpApi:
+          path: /products
+          method: post
+  getOneProduct:
+    handler: handler.get_one_product
+    events:
+      - httpApi:
+          path: /products/{product_id}
+          method: get
+  deleteOneProduct:
+    handler: handler.delete_one_product
+    events:
+      - httpApi:
+          path: /products/{product_id}
+          method: delete
+  updateProduct:
+    handler: handler.update_product
+    events:
+      - httpApi:
+          path: /products/{product_id}
+          method: put
+  addStocksToProduct:
+    handler: handler.add_stocks_to_product
+    events:
+      - httpApi:
+          path: /products/{product_id}/inventory
+          method: post
+  batchCreateProducts:
+    handler: handler.batch_create_products
+    events:
+      - s3:
+          bucket: products-s3bucket-paul
+          event: s3:ObjectCreated:*
+          existing: true
+
+# resources:
+#   Resources:
+#     ProductsTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: products-table-paul
+#         AttributeDefinitions:
+#           - AttributeName: product_id
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: product_id
+#             KeyType: HASH
+#         BillingMode: PAY_PER_REQUEST
+
+#     InventoryTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: product-inventory-paul
+#         AttributeDefinitions:
+#           - AttributeName: product_id
+#             AttributeType: S
+#           - AttributeName: datetime
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: product_id
+#             KeyType: HASH
+#           - AttributeName: datetime
+#             KeyType: RANGE
+#         BillingMode: PAY_PER_REQUEST
