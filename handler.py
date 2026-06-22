@@ -33,6 +33,7 @@ def get_all_products(event, context):
     return_body = {}
     return_body["items"] = table.scan().get('Items')
     return_body["status"] = "success"
+    return_body["message"] = "Hello from my fully automated CodePipeline!"
 
     response = {"statusCode": 200, "body": json.dumps(return_body, cls=DecimalEncoder)}
     return response
